@@ -10,22 +10,28 @@ pub Prog: Prog = {
     Decl* => Prog::new(<>),
 };
 
-pub Decl: Decl = {
-    <Id> ":" <Type> ":=" <Expr> => Decl::new(<>),
+Decl: Decl = {
+    <Id> ":" <Typing> ":=" <Expr> => Decl::new(<>),
 };
 
-pub Typing: Typing = {
-    "("? <TypeId> ")"? => Typing::Concrete(<>),
-    "("? <a:Typing*> ")"? "->" "("? <r:Typing*> ")"? => Typing::Function(<>),
+Typing: Typing = {
+    TypeId => Typing::Concrete(<>),
+    <a:TypeId> "->" <r:TypeId> =>
+        Typing::Function(vec![Typing::Concrete(a)], vec![Typing::Concrete(r)]),
+    <a:TypeId> "->" "(" <r:Typing*> ")" =>
+        Typing::Function(vec![Typing::Concrete(a)], r),
+    "(" <a:Typing*> ")" "->" <r:TypeId> =>
+        Typing::Function(a, vec![Typing::Concrete(r)]),
+    "(" <a:Typing*> ")" "->" "(" <r:Typing*> ")" => Typing::Function(<>),
 };
 
-pub Expr: Expr = {
+Expr: Expr = {
     Literal => Expr::Literal(<>),
     Id      => Expr::Id(<>),
     Block   => Expr::Block(<>),
 };
 
-pub Literal: Literal = {
+Literal: Literal = {
     r"-?[0-9][0-9_]*" =>
         Literal::Int(Integer::from_str_radix(<>, 10).unwrap()),
     <s:r"-?0[xX][0-9a-fA-F][0-9a-fA-F_]*"> =>
@@ -97,11 +103,23 @@ Block: Vec<Expr> = {
     "{" <Expr*> "}" => <>,
 };
 
+Id: String = {
+    r"[A-Z][a-zA-Z0-9_'\-]*" => <>,
+    r"[a-zA-Z_~`!@#$%^&*+=|:;'<>,.?/][a-zA-Z0-9_~`!@#$%^&*+=|:;'<>,.?/\-]*"
+        => <>,
+};
+
 TypeId: String = {
     r"[A-Z][a-zA-Z0-9_'\-]*" => <>,
 };
 
-Id: String = {
-    r"[a-zA-Z_~`!@#$%^&*+=|:;'<>,.?/\-][a-zA-Z0-9_~`!@#$%^&*+=|:;'<>,.?/\-]*"
-        => <>,
-};
+match {
+    r"-?[0-9]*\.[0-9][0-9_]*"
+} else {
+    r"-?[0-9][0-9_]*[0-9]\.[0-9][0-9_]*"
+} else {
+    r"[A-Z][a-zA-Z0-9_'\-]*"
+} else {
+    r"[a-zA-Z_~`!@#$%^&*+=|:;'<>,.?/][a-zA-Z0-9_~`!@#$%^&*+=|:;'<>,.?/\-]*",
+    _
+}
