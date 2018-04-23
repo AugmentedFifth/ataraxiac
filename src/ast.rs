@@ -1,4 +1,4 @@
-use ramp::Int as BigInt;
+use rug::Integer;
 
 
 pub struct Prog {
@@ -23,7 +23,7 @@ pub enum Expr {
 }
 
 pub enum Literal {
-    Int(BigInt),
+    Int(Integer),
     Float(f64),
     Char(char),
     Str(String),

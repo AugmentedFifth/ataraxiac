@@ -1,4 +1,7 @@
 use ast::*;
+use core::f64;
+use rug::Integer;
+use std::str::FromStr;
 
 grammar;
 
@@ -12,48 +15,93 @@ pub Decl: Decl = {
 };
 
 pub Typing: Typing = {
-    TypeId => Typing::Concrete(<>),
-
-    <v:(<Typing> "->")*> <e:T?> => match e {
-        None => v,
-        Some(e) => {
-            let mut v = v;
-            v.push(e);
-            v
-        }
-    }
+    "("? <TypeId> ")"? => Typing::Concrete(<>),
+    "("? <a:Typing*> ")"? "->" "("? <r:Typing*> ")"? => Typing::Function(<>),
 };
 
+pub Expr: Expr = {
+    Literal => Expr::Literal(<>),
+    Id      => Expr::Id(<>),
+    Block   => Expr::Block(<>),
+};
 
+pub Literal: Literal = {
+    r"-?[0-9][0-9_]*" =>
+        Literal::Int(Integer::from_str_radix(<>, 10).unwrap()),
+    <s:r"-?0[xX][0-9a-fA-F][0-9a-fA-F_]*"> =>
+        Literal::Int(Integer::from_str_radix(match s.chars().nth(0).unwrap() {
+            '0' => &s[2..],
+            _ => {
+                let mut digits = String::with_capacity(s.len() - 2);
+                digits.push('-');
+                digits.push_str(&s[3..]);
+
+                &digits
+            },
+        }, 16).unwrap()),
+    <s:r"-?0[bB][01][01_]*"> =>
+        Literal::Int(Integer::from_str_radix(match s.chars().nth(0).unwrap() {
+            '0' => &s[2..],
+            _ => {
+                let mut digits = String::with_capacity(s.len() - 2);
+                digits.push('-');
+                digits.push_str(&s[3..]);
+
+                &digits
+            },
+        }, 2).unwrap()),
+    r"-?[0-9]*\.[0-9][0-9_]*" => Literal::Float(f64::from_str(<>).unwrap()),
+    r"-?[0-9][0-9_]*[0-9]\.[0-9][0-9_]*" =>
+        Literal::Float(f64::from_str(<>).unwrap()),
+    "NAN" => Literal::Float(f64::NAN),
+    "INF" => Literal::Float(f64::INFINITY),
+    "-INF" => Literal::Float(f64::NEG_INFINITY),
+    r"#'[^'\\]'" => Literal::Char(<>.chars().nth(2).unwrap()),
+    r#"#'\\['"\\nrt0]'"# => Literal::Char(match <>.chars().nth(3).unwrap() {
+        'n' => '\n',
+        'r' => '\r',
+        't' => '\t',
+        '0' => '\0',
+        c   => c,
+    }),
+    <s:r#""([^"\\]|\\['"\\nrt0])*""#> => Literal::Str({
+        let mut string = String::with_capacity(s.len() - 1);
+        let mut chars = s.chars();
+        chars.next();
+
+        let mut esc = false;
+        for c in chars {
+            if esc {
+                string.push(match c {
+                    'n' => '\n',
+                    'r' => '\r',
+                    't' => '\t',
+                    '0' => '\0',
+                    c   => c,
+                });
+                esc = false;
+            } else if c == '\\' {
+                esc = true;
+            } else {
+                string.push(c);
+            }
+        }
+        string.pop();
+
+        string
+    }),
+    "[" <Expr*> "]" => Literal::List(<>),
+};
+
+Block: Vec<Expr> = {
+    "{" <Expr*> "}" => <>,
+};
 
 TypeId: String = {
     r"[A-Z][a-zA-Z0-9_'\-]*" => <>,
 };
 
 Id: String = {
-    r"[a-zA-Z_~`!@#$%^&*+=|:;'<>,.?/\-][a-zA-Z0-9_~`!@#$%^&*+=|:;'<>,.?/\-]*" => <>,
+    r"[a-zA-Z_~`!@#$%^&*+=|:;'<>,.?/\-][a-zA-Z0-9_~`!@#$%^&*+=|:;'<>,.?/\-]*"
+        => <>,
 };
-
-
-/*
-pub Expr: i32 = {
-    <l:Expr> "+" <r:Factor> => l + r,
-    <l:Expr> "-" <r:Factor> => l - r,
-    Factor,
-};
-
-Factor: i32 = {
-    <l:Factor> "*" <r:Term> => l * r,
-    <l:Factor> "/" <r:Term> => l / r,
-    Term,
-};
-
-Term: i32 = {
-    Num,
-    "(" <Expr> ")",
-};
-
-Num: i32 = {
-    r"[0-9]+" => i32::from_str(<>).unwrap(),
-};
-*/

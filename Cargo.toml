@@ -8,8 +8,12 @@ lalrpop = "*"
 
 [dependencies]
 lalrpop-util = "*"
-ramp = "*"
 regex = "*"
+
+[dependencies.rug]
+version = "*"
+default-features = false
+features = ["integer"]
 
 [features]
 default = []
