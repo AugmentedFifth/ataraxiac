@@ -23,10 +23,10 @@ fn main_() -> Result<(), Error> {
                      or even used to generate native code through an \
                      LLVM backend.\n\n\
 
-                     ataraxia is a high-level, statically typed, \
-                     stack-oriented programming language: similar to Joy, \
-                     Forth, or PostScript, but more similar to Rust in terms \
-                     of typechecking and handling of data.")
+                     ataraxia is a high-level, statically-strongly typed, \
+                     stack-oriented programming language. It is similar to \
+                     Joy, Forth, or PostScript, but more similar to Rust in \
+                     terms of typechecking and handling of data.")
         .version(crate_version!())
         .arg(Arg::with_name("infile")
              .index(1)
@@ -47,6 +47,9 @@ fn main_() -> Result<(), Error> {
     let mut buf_reader = BufReader::new(infile);
     let mut infile_contents = String::new();
     buf_reader.read_to_string(&mut infile_contents)?;
+
+    println!("{}", infile_contents);
+    println!();
 
     let prog = ProgParser::new()
         .parse(&infile_contents)
