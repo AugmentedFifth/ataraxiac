@@ -30,18 +30,23 @@ fn main_() -> Result<(), Error> {
         .version(crate_version!())
         .arg(Arg::with_name("infile")
              .index(1)
-             .required(true))
+             .required(true)
+             .help("Input source code file, usually *.aaa"))
         .arg(Arg::with_name("outfile")
              .short("o")
              .long("outfile")
              .alias("out")
-             .takes_value(true))
+             .takes_value(true)
+             .help("Output bytecode file, default is input name with *.abc \
+                    extension"))
         .arg(Arg::with_name("syntax-only")
              .short("s")
-             .long("syntax-only"))
+             .long("syntax-only")
+             .help("Only check syntax; no output, only exit code"))
         .get_matches();
 
     let infile_name = m.value_of("infile").unwrap();
+    let syntax_only = m.is_present("syntax-only");
 
     let infile = File::open(infile_name)?;
     let mut buf_reader = BufReader::new(infile);
@@ -51,11 +56,11 @@ fn main_() -> Result<(), Error> {
     println!("{}", infile_contents);
     println!();
 
-    let prog = ProgParser::new()
+    let ast = ProgParser::new()
         .parse(&infile_contents)
         .map_err(|e| format_err!("{}", e))?;
 
-    println!("{:?}", prog);
+    println!("{:?}", ast);
 
     Ok(())
 }

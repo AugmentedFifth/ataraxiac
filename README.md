@@ -1,4 +1,4 @@
-# ataraxiac: compiler for the ataraxia programming language
+# [ataraxiac](https://gitlab.com/AugmentedFourth/ataraxiac): compiler for the ataraxia programming language
 
 [![version: v0.0.0](https://img.shields.io/badge/version-v0.0.0-37a988.svg "version: v0.0.0")](https://gitlab.com/AugmentedFourth/ataraxiac)
 [![status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-444444.svg "status: pre-alpha")](https://gitlab.com/AugmentedFourth/ataraxiac)
