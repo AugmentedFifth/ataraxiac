@@ -1,10 +1,10 @@
 # ataraxiac: compiler for the ataraxia programming language
 
-![](https://img.shields.io/badge/version-v0.0.0-37a988.svg)
-![](https://img.shields.io/badge/status-pre--alpha-444444.svg)
-[![](https://img.shields.io/badge/license-UPL_v1+-3f779d.svg)](https://opensource.org/licenses/UPL)
-![](https://img.shields.io/badge/implementation-Rust-b7410e.svg)
-![](https://img.shields.io/badge/rustc-nightly-d185bd.svg)
+[![version: v0.0.0](https://img.shields.io/badge/version-v0.0.0-37a988.svg "version: v0.0.0")](/#)
+[![status: pre-alpha](https://img.shields.io/badge/status-pre--alpha-444444.svg "status: pre-alpha")](/#)
+[![license: UPL v1+](https://img.shields.io/badge/license-UPL_v1+-3f779d.svg "license: UPL v1+")](https://opensource.org/licenses/UPL)
+[![implementation: Rust](https://img.shields.io/badge/implementation-Rust-b7410e.svg "implementation: Rust")](/#)
+[![rustc: nightly](https://img.shields.io/badge/rustc-nightly-d185bd.svg "rustc: nightly")](/#)
 
 ---
 
@@ -21,7 +21,7 @@ programming language. It is similar to
 [Rust](https://www.rust-lang.org) in terms of typechecking and handling of
 data.
 
-More about the language, including a specification, [can be found here](#TODO).
+More about the language, including a specification, [can be found here](/#TODO).
 
 ## using ataraxiac
 
