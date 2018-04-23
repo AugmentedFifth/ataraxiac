@@ -1,5 +1,5 @@
 use ast::*;
-use core::f64;
+use std::f64;
 use rug::Integer;
 use std::str::FromStr;
 
@@ -34,27 +34,25 @@ Expr: Expr = {
 Literal: Literal = {
     r"-?[0-9][0-9_]*" =>
         Literal::Int(Integer::from_str_radix(<>, 10).unwrap()),
-    <s:r"-?0[xX][0-9a-fA-F][0-9a-fA-F_]*"> =>
-        Literal::Int(Integer::from_str_radix(match s.chars().nth(0).unwrap() {
-            '0' => &s[2..],
-            _ => {
-                let mut digits = String::with_capacity(s.len() - 2);
-                digits.push('-');
-                digits.push_str(&s[3..]);
+    <s:r"0[xX][0-9a-fA-F][0-9a-fA-F_]*"> =>
+        Literal::Int(Integer::from_str_radix(&s[2..], 16).unwrap()),
+    <s:r"-0[xX][0-9a-fA-F][0-9a-fA-F_]*"> =>
+        Literal::Int(Integer::from_str_radix(&{
+            let mut digits = String::with_capacity(s.len() - 2);
+            digits.push('-');
+            digits.push_str(&s[3..]);
 
-                &digits
-            },
+            digits
         }, 16).unwrap()),
-    <s:r"-?0[bB][01][01_]*"> =>
-        Literal::Int(Integer::from_str_radix(match s.chars().nth(0).unwrap() {
-            '0' => &s[2..],
-            _ => {
-                let mut digits = String::with_capacity(s.len() - 2);
-                digits.push('-');
-                digits.push_str(&s[3..]);
+    <s:r"0[bB][01][01_]*"> =>
+        Literal::Int(Integer::from_str_radix(&s[2..], 2).unwrap()),
+    <s:r"-0[bB][01][01_]*"> =>
+        Literal::Int(Integer::from_str_radix(&{
+            let mut digits = String::with_capacity(s.len() - 2);
+            digits.push('-');
+            digits.push_str(&s[3..]);
 
-                &digits
-            },
+            digits
         }, 2).unwrap()),
     r"-?[0-9]*\.[0-9][0-9_]*" => Literal::Float(f64::from_str(<>).unwrap()),
     r"-?[0-9][0-9_]*[0-9]\.[0-9][0-9_]*" =>
@@ -104,13 +102,13 @@ Block: Vec<Expr> = {
 };
 
 Id: String = {
-    r"[A-Z][a-zA-Z0-9_'\-]*" => <>,
+    r"[A-Z][a-zA-Z0-9_'\-]*" => <>.to_owned(),
     r"[a-zA-Z_~`!@#$%^&*+=|:;'<>,.?/][a-zA-Z0-9_~`!@#$%^&*+=|:;'<>,.?/\-]*"
-        => <>,
+        => <>.to_owned(),
 };
 
 TypeId: String = {
-    r"[A-Z][a-zA-Z0-9_'\-]*" => <>,
+    r"[A-Z][a-zA-Z0-9_'\-]*" => <>.to_owned(),
 };
 
 match {
