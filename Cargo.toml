@@ -7,6 +7,8 @@ authors = ["z"]
 lalrpop = "*"
 
 [dependencies]
+clap = "*"
+failure = "*"
 lalrpop-util = "*"
 regex = "*"
 
