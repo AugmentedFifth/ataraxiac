@@ -11,18 +11,17 @@ pub Prog: Prog = {
 };
 
 Decl: Decl = {
-    <Id> ":" <Typing> ":=" <Expr> => Decl::new(<>),
+    <Id> ":" <FullTyping> ":=" <Expr> => Decl::new(<>),
+};
+
+FullTyping: Typing = {
+    <Typing+> "->" <Typing+> => Typing::Function(<>),
+    Typing                   => <>,
 };
 
 Typing: Typing = {
-    TypeId => Typing::Concrete(<>),
-    <a:TypeId> "->" <r:TypeId> =>
-        Typing::Function(vec![Typing::Concrete(a)], vec![Typing::Concrete(r)]),
-    <a:TypeId> "->" "(" <r:Typing*> ")" =>
-        Typing::Function(vec![Typing::Concrete(a)], r),
-    "(" <a:Typing*> ")" "->" <r:TypeId> =>
-        Typing::Function(a, vec![Typing::Concrete(r)]),
-    "(" <a:Typing*> ")" "->" "(" <r:Typing*> ")" => Typing::Function(<>),
+    TypeId                           => Typing::Concrete(<>),
+    "(" <Typing+> "->" <Typing+> ")" => Typing::Function(<>),
 };
 
 Expr: Expr = {
@@ -32,6 +31,8 @@ Expr: Expr = {
 };
 
 Literal: Literal = {
+    "true" => Literal::Bool(true),
+    "false" => Literal::Bool(false),
     r"-?[0-9][0-9_]*" =>
         Literal::Int(Integer::from_str_radix(<>, 10).unwrap()),
     <s:r"0[xX][0-9a-fA-F][0-9a-fA-F_]*"> =>
@@ -54,12 +55,13 @@ Literal: Literal = {
 
             digits
         }, 2).unwrap()),
-    r"-?[0-9]*\.[0-9][0-9_]*" => Literal::Float(f64::from_str(<>).unwrap()),
-    r"-?[0-9][0-9_]*[0-9]\.[0-9][0-9_]*" =>
+    r"-?[0-9]*\.[0-9][0-9_]*([eE]-?[0-9]+)?" =>
         Literal::Float(f64::from_str(<>).unwrap()),
-    "NAN" => Literal::Float(f64::NAN),
-    "INF" => Literal::Float(f64::INFINITY),
-    "-INF" => Literal::Float(f64::NEG_INFINITY),
+    r"-?[0-9][0-9_]*[0-9]\.[0-9][0-9_]*([eE]-?[0-9]+)?" =>
+        Literal::Float(f64::from_str(<>).unwrap()),
+    "NaN" => Literal::Float(f64::NAN),
+    "inf" => Literal::Float(f64::INFINITY),
+    "-inf" => Literal::Float(f64::NEG_INFINITY),
     r"#'[^'\\]'" => Literal::Char(<>.chars().nth(2).unwrap()),
     r#"#'\\['"\\nrt0]'"# => Literal::Char(match <>.chars().nth(3).unwrap() {
         'n' => '\n',
@@ -114,11 +116,16 @@ TypeId: String = {
 match {
     ":=",
     ":",
-    "->"
+    "->",
+    "-inf",
+    "inf",
+    "NaN",
+    "true",
+    "false"
 } else {
-    r"-?[0-9]*\.[0-9][0-9_]*"
+    r"-?[0-9]*\.[0-9][0-9_]*([eE]-?[0-9]+)?"
 } else {
-    r"-?[0-9][0-9_]*[0-9]\.[0-9][0-9_]*"
+    r"-?[0-9][0-9_]*[0-9]\.[0-9][0-9_]*([eE]-?[0-9]+)?"
 } else {
     r"[A-Z][a-zA-Z0-9_'\-]*"
 } else {

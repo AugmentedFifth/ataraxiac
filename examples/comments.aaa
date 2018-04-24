@@ -1,0 +1,13 @@
+fib : \{ multi line
+
+       6
+
+    comment
+\} Nat -> Nat := { \ single line comment
+    0 1 rot3 {
+        dec rotr3 dup rotr3 + rot3
+    } {dup 0 >\{another multi
+                             line\}} while
+    pop pop \ pop pop
+}
+\ pop

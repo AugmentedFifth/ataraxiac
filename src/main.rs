@@ -1,3 +1,5 @@
+#![feature(nll)]
+
 #[macro_use]
 extern crate clap;
 #[macro_use]
@@ -6,6 +8,7 @@ extern crate rug;
 
 mod ast;
 mod ataraxia;
+mod preprocessor;
 
 use ataraxia::ProgParser;
 use clap::{App, Arg};
@@ -52,6 +55,8 @@ fn main_() -> Result<(), Error> {
     let mut buf_reader = BufReader::new(infile);
     let mut infile_contents = String::new();
     buf_reader.read_to_string(&mut infile_contents)?;
+
+    preprocessor::strip_comments(&mut infile_contents);
 
     println!("{}", infile_contents);
     println!();

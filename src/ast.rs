@@ -28,6 +28,7 @@ pub enum Expr {
 
 #[derive(Debug)]
 pub enum Literal {
+    Bool(bool),
     Int(Integer),
     Float(f64),
     Char(char),
