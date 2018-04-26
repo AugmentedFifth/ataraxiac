@@ -9,3 +9,4 @@ Cargo.lock
 
 # Specific stuff
 ataraxia.rs
+*.log

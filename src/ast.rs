@@ -1,32 +1,32 @@
 use rug::Integer;
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Prog {
     pub decls: Vec<Decl>,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct Decl {
     pub name:   String,
     pub typing: Typing,
     pub body:   Expr,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Typing {
     Concrete(String),
     Function(Vec<Typing>, Vec<Typing>),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Expr {
     Literal(Literal),
     Id(String),
     Block(Vec<Expr>),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum Literal {
     Bool(bool),
     Int(Integer),

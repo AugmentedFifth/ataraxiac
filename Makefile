@@ -1,4 +1,7 @@
-.PHONY: debug release native
+.PHONY: clippy debug release native
+
+clippy:
+	cargo clippy -- -W useless-attribute &>clippy.log && perl -0777 -pi -e 's/warning: ([^\/]|\n)+?\/ataraxia\.rs:(.|\n)+?(.|\n)= help:.+//g' clippy.log
 
 debug:
 	cargo build
