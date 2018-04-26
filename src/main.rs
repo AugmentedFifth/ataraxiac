@@ -23,13 +23,16 @@ fn main_() -> Result<(), Error> {
         .long_about("A compiler for the ataraxia language.\n\n\
 
                      ataraxiac emits bytecode that can then be interpreted, \
-                     or even used to generate native code through an \
-                     LLVM backend.\n\n\
+                     and may even in the future emit LLVM IR to be compiled \
+                     into native code.\n\n\
 
                      ataraxia is a high-level, statically-strongly typed, \
                      stack-oriented programming language. It is similar to \
                      Joy, Forth, or PostScript, but more similar to Rust in \
-                     terms of typechecking and handling of data.")
+                     terms of typechecking and handling of data.\n\n\
+
+                     See https://gitlab.com/AugmentedFourth/ataraxia for \
+                     documentation on ataraxia.")
         .version(crate_version!())
         .arg(Arg::with_name("infile")
              .index(1)

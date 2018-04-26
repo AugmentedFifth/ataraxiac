@@ -22,7 +22,7 @@ programming language. It is similar to
 [Rust](https://www.rust-lang.org) in terms of typechecking and handling of
 data.
 
-More about the language, including a specification, [can be found here](https://gitlab.com/AugmentedFourth/ataraxia).
+**More about the language, including a specification, [can be found here](https://gitlab.com/AugmentedFourth/ataraxia)**.
 
 ## using ataraxiac
 
