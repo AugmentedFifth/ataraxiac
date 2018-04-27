@@ -5,7 +5,7 @@
 [![license: UPL v1+](https://img.shields.io/badge/license-UPL_v1+-3f779d.svg "license: UPL v1+")](https://opensource.org/licenses/UPL)
 [![implementation: Rust](https://img.shields.io/badge/implementation-Rust-b7410e.svg "implementation: Rust")](https://www.rust-lang.org)
 [![rustc: nightly](https://img.shields.io/badge/rustc-nightly-d185bd.svg "rustc: nightly")](https://github.com/rust-lang/rust)
-[![documentation: CC BY-SA 4.0](https://img.shields.io/badge/documentation-CC_BY--SA_4.0-c6be5f.svg "documentation: CC BY-SA 4.0")](https://gitlab.com/AugmentedFourth/ataraxia)
+[![documentation: CC BY-SA 4.0](https://img.shields.io/badge/documentation-CC_BY--SA_4.0-c6be5f.svg "documentation: CC BY-SA 4.0")](https://ataraxia.nfshost.com)
 
 ---
 
@@ -13,7 +13,7 @@
 
 **ataraxia** is a
 [high-level](https://en.wikipedia.org/wiki/High-level_programming_language),
-[statically-strongly typed](https://en.wikipedia.org/wiki/Intuitionistic_type_theory),
+[statically-strongly typed](https://en.wikipedia.org/wiki/System_F),
 [stack-oriented](https://en.wikipedia.org/wiki/Stack-oriented_programming_language)
 programming language. It is similar to
 [Joy](https://en.wikipedia.org/wiki/Joy_\(programming_language\)),
@@ -22,7 +22,7 @@ programming language. It is similar to
 [Rust](https://www.rust-lang.org) in terms of typechecking and handling of
 data.
 
-**More about the language, including a specification, [can be found here](https://gitlab.com/AugmentedFourth/ataraxia)**.
+**More about the language, including a specification, [can be found here](https://ataraxia.nfshost.com)**.
 
 ## using ataraxiac
 

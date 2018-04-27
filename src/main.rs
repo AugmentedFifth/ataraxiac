@@ -31,8 +31,8 @@ fn main_() -> Result<(), Error> {
                      Joy, Forth, or PostScript, but more similar to Rust in \
                      terms of typechecking and handling of data.\n\n\
 
-                     See https://gitlab.com/AugmentedFourth/ataraxia for \
-                     documentation on ataraxia.")
+                     See https://ataraxia.nfshost.com for documentation on \
+                     ataraxia.")
         .version(crate_version!())
         .arg(Arg::with_name("infile")
              .index(1)
